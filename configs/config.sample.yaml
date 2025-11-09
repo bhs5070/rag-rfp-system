@@ -1,0 +1,42 @@
+project:
+  name: rag-rfp
+  seed: 42
+data:
+  meta_csv: data/data_list.csv
+  raw_dir: data/raw
+  interim_dir: data/interim
+  processed_dir: data/processed
+parsing:
+  pdf:
+    engine: "pymupdf"   # alt: "pdfminer"
+  hwp:
+    engine: "hwp5txt"   # alt: "pyhwp"
+preprocess:
+  normalize:
+    keep_layout: false
+    drop_headers_footers: true
+  chunk:
+    method: "sliding_window"
+    max_tokens: 512
+    stride: 128
+    overlap_ratio: 0.25
+    min_chars: 200
+embeddings:
+  provider: "openai"
+  model: "text-embedding-3-large"
+  batch_size: 32
+index:
+  backend: "faiss"
+  dim: 3072
+  path: "./vectorstore"
+retrieve:
+  top_k: 8
+  bm25_fallback: true
+rerank:
+  enabled: true
+  model: "BAAI/bge-reranker-base"
+generate:
+  provider: "openai"
+  model: "gpt-4o-mini"
+  max_tokens: 512
+  temperature: 0.2
