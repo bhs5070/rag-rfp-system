@@ -104,7 +104,7 @@ Pull 시 권장:
 git pull origin main --rebase
 
 ## 📈 향후 개선 방향
-평가 지표 추가 (Recall@K, nDCG 등)
-LangChain / Chroma 기반 백엔드 실험
-Streamlit / FastAPI 프론트엔드 UI 연동
+평가 지표 추가 (Recall@K, nDCG 등)  
+LangChain / Chroma 기반 백엔드 실험  
+Streamlit / FastAPI 프론트엔드 UI 연동  
 Docker 컨테이너화 및 배포 자동화
