@@ -63,32 +63,40 @@ make serve    # FastAPI 서버 실행 (http://127.0.0.1:8000/docs)
 
 ## 🧩 주요 구성요소
 모듈	파일 경로	역할  
-Parser	src/rag_rfp/io/parse_pdf.py, parse_hwp.py	PDF/HWP 문서에서 텍스트 추출  
-Normalizer	src/rag_rfp/io/normalize.py	텍스트 정제, 공백/노이즈 제거  
-Chunker	src/rag_rfp/prep/chunk.py	문서를 청크 단위로 분리  
-Embedder	src/rag_rfp/index/embed.py	텍스트 → 벡터 임베딩 변환  
-Vector DB	src/rag_rfp/index/vectordb.py	FAISS 기반 벡터 인덱스 관리  
-Retriever	src/rag_rfp/retrieve/retriever.py	Top-K 관련 문서 검색  
-Reranker	src/rag_rfp/retrieve/rerank.py	교차 인코더 기반 리랭킹  
-Generator	src/rag_rfp/generate/generator.py	검색 결과 기반 답변 생성 (LLM)  
-CLI 도구	src/cli/	전체 파이프라인 실행을 위한 명령어 스크립트  
+| **모듈명**        | **파일 경로**                                     | **역할**                   |
+| -------------- | --------------------------------------------- | ------------------------ |
+| **Parser**     | `src/rag_rfp/io/parse_pdf.py`, `parse_hwp.py` | PDF/HWP 문서에서 텍스트 추출      |
+| **Normalizer** | `src/rag_rfp/io/normalize.py`                 | 텍스트 정제, 공백 및 노이즈 제거      |
+| **Chunker**    | `src/rag_rfp/prep/chunk.py`                   | 문서를 청크 단위로 분리            |
+| **Embedder**   | `src/rag_rfp/index/embed.py`                  | 텍스트 → 벡터 임베딩 변환          |
+| **Vector DB**  | `src/rag_rfp/index/vectordb.py`               | FAISS 기반 벡터 인덱스 관리       |
+| **Retriever**  | `src/rag_rfp/retrieve/retriever.py`           | Top-K 관련 문서 검색 수행        |
+| **Reranker**   | `src/rag_rfp/retrieve/rerank.py`              | 교차 인코더 기반 리랭킹 수행         |
+| **Generator**  | `src/rag_rfp/generate/generator.py`           | 검색 결과 기반 답변 생성 (LLM)     |
+| **CLI 도구**     | `src/cli/`                                    | 전체 파이프라인 실행을 위한 명령어 스크립트 |
+
 
 ## 🧠 수정/확장 가이드
 변경 목표	수정 파일	설명  
-임베딩 모델 변경	index/embed.py	OpenAI → SentenceTransformer 등   
-검색 전략 변경	retrieve/retriever.py	BM25 / Hybrid Search 추가 가능  
-LLM 모델 교체	generate/generator.py	GPT-4o → Mistral, Claude 등으로 변경  
-청킹 규칙 수정	prep/chunk.py	max_tokens, stride 조정  
-하이퍼파라미터 변경	configs/config.local.yaml	temperature, top_k 등 수정  
-API 추가	cli/serve_api.py	FastAPI 엔드포인트 추가 가능  
+| **변경 목표**  | **수정 파일**                   | **설명**                                  |
+| ---------- | --------------------------- | --------------------------------------- |
+| 임베딩 모델 변경  | `index/embed.py`            | OpenAI → SentenceTransformer 등 로컬 모델 교체 |
+| 검색 전략 변경   | `retrieve/retriever.py`     | BM25 / Hybrid Search 등 새로운 검색 방식 추가     |
+| LLM 모델 교체  | `generate/generator.py`     | GPT-4o → Mistral, Claude 등으로 변경         |
+| 청킹 규칙 수정   | `prep/chunk.py`             | `max_tokens`, `stride` 등 청킹 규칙 조정       |
+| 하이퍼파라미터 변경 | `configs/config.local.yaml` | `temperature`, `top_k` 등 파라미터 수정        |
+| API 추가     | `cli/serve_api.py`          | FastAPI 엔드포인트 추가 및 수정 가능                |
+ 
 
 ## 🧰 개발 명령어 요약
 명령어	설명  
-make setup	가상환경 생성 및 의존성 설치  
-make ingest	데이터 파싱 및 청킹  
-make index	벡터 인덱스 구축  
-make serve	FastAPI 서버 실행  
-make ask	CLI로 직접 질의 수행  
+| **명령어**       | **설명**           |
+| ------------- | ---------------- |
+| `make setup`  | 가상환경 생성 및 의존성 설치 |
+| `make ingest` | 데이터 파싱 및 청킹 수행   |
+| `make index`  | 벡터 인덱스 구축        |
+| `make serve`  | FastAPI 서버 실행    |
+| `make ask`    | CLI로 직접 질의 수행    |
 
 ## 👥 협업 규칙
 브랜치 전략:
