@@ -36,6 +36,9 @@ Thumbs.db
 wandb/
 logs/
 outputs/
+!outputs/structure_check/
+!outputs/structure_check/summary_final.md
+
 checkpoints/
 tmp/
 cache/
@@ -80,3 +83,4 @@ reports/
 __MACOSX/
 
 
+!outputs/structure_check/summary_final.md
