@@ -17,7 +17,7 @@
 - **대상 문서:** 100개 RFP PDF  
 - **분석 목적:** 구조적 일관성 확인, OCR 불필요성 검증, 청킹 품질 확인, Retrieval 유사도 점검  
 - **출력 경로:** `outputs/structure_check/`  
-- **관련 노트북:** `notebooks/06_rag_simulation.ipynb`
+- **관련 노트북:** `01_data_structure.ipynb`
 
 ---
 
