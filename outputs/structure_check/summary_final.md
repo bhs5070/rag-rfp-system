@@ -108,16 +108,16 @@
 ---
 
 ## 4️⃣ 프로젝트 폴더 구조 예시
-outputs/
-structure_check/
-pdf_inventory.md
-document_structure.md
-ocr_comparison.md
-chunking_quality.md
-retrieval_quality.md
-summary_final.md ← 이 파일
-notebooks/
-01_data_structure.ipynb
+outputs/  
+structure_check/  
+pdf_inventory.md  
+document_structure.md  
+ocr_comparison.md  
+chunking_quality.md  
+retrieval_quality.md  
+summary_final.md ← 이 파일  
+notebooks/  
+01_data_structure.ipynb  
 
 ---
 
