@@ -1,46 +1,43 @@
-import os, json
-import typer
-from loguru import logger
-from pydantic import BaseModel
-from typing import List, Dict
-from dotenv import load_dotenv
+# src/cli/ask.py
 
-from src.rag_rfp.index.vectordb import FaissIndex
-from src.rag_rfp.index.embed import embed_texts
-from src.rag_rfp.retrieve.rerank import CrossEncoderReranker
-from src.rag_rfp.generate.generator import generate_answer
+from __future__ import annotations
+import sys
 
-app = typer.Typer()
-load_dotenv()  # .env 있으면 로드
+from rag_rfp.retrieve.retriever import ChunkRetriever
+from rag_rfp.generate.generator import RAGGenerator
 
-class AskArgs(BaseModel):
-    q: str
-    top_k: int = 8
-    rerank: bool = True
-    index_dir: str = os.getenv("VECTOR_DIR", "./vectorstore")
 
-@app.command()
-def main(
-    q: str = typer.Option(..., help="질문"),
-    top_k: int = typer.Option(8, help="검색 개수"),
-    rerank: bool = typer.Option(True, help="리랭크 여부"),
-    index_dir: str = typer.Option(os.getenv("VECTOR_DIR", "./vectorstore"), help="인덱스 경로")
-):
-    args = AskArgs(q=q, top_k=top_k, rerank=rerank, index_dir=index_dir)
-    index = FaissIndex.load(args.index_dir)
-    qv = embed_texts([args.q])[0]
-    hits: List[Dict] = index.search(qv, k=args.top_k)
+def main() -> None:
+    print("=== RAG CLI (chunks_512_64_final 기반) ===")
+    print("종료하려면 빈 줄 또는 Ctrl+C 를 입력하세요.\n")
 
-    if args.rerank and hits:
-        reranker = CrossEncoderReranker()
-        hits = reranker.rerank(args.q, hits, top_k=args.top_k)
+    retriever = ChunkRetriever()
+    generator = RAGGenerator(retriever=retriever)
 
-    answer = generate_answer(args.q, hits)
-    print("\n=== Answer ===\n")
-    print(answer)
-    print("\n=== Contexts ===\n")
-    for h in hits:
-        print(json.dumps({"doc_id": h.get("doc_id"), "page": h.get("page"), "score": h.get("re_score", h.get("score"))}, ensure_ascii=False))
+    while True:
+        try:
+            question = input("질문 > ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\n종료합니다.")
+            break
+
+        if not question:
+            print("종료합니다.")
+            break
+
+        answer_obj = generator.ask(question)
+
+        print("\n[답변]\n")
+        print(answer_obj.answer)
+
+        print("\n[사용된 컨텍스트 요약]\n")
+        for ctx in answer_obj.contexts[:3]:
+            print(
+                f"- doc={ctx.get('doc_id')}, chunk={ctx.get('chunk_index')}, "
+                f"chars={ctx.get('n_chars')}, score={ctx.get('score'):.4f}"
+            )
+        print("\n" + "-" * 60 + "\n")
+
 
 if __name__ == "__main__":
-    app()
+    main()
