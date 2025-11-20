@@ -35,10 +35,12 @@ Thumbs.db
 *.log
 wandb/
 logs/
-outputs/
-!outputs/structure_check/
-!outputs/structure_check/summary_final.md
-
+outputs/*
+# Allow structure-aware chunking files
+!outputs/structure_chunks/
+!outputs/structure_chunks/*.jsonl
+!outputs/structure_chunks/*.npy
+!outputs/structure_chunks/*.pkl
 checkpoints/
 tmp/
 cache/
