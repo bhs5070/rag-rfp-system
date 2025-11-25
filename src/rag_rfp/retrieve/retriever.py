@@ -9,10 +9,7 @@ import numpy as np
 import pandas as pd
 import faiss
 from dotenv import load_dotenv
-from openai import OpenAI
-
-# .env 에 있는 OPENAI_API_KEY 로드
-load_dotenv()
+from sentence_transformers import SentenceTransformer
 
 # ==== 경로 설정 ====
 BASE_DIR = Path(__file__).resolve().parents[3]  # rag-rfp-system/
@@ -25,13 +22,11 @@ CHUNKS_PATH = DATA_DIR / "chunks_512_64_final.jsonl"
 FAISS_INDEX_PATH = OUTPUT_DIR / "chunks_512_64.faiss"
 META_PATH = OUTPUT_DIR / "chunks_512_64_meta.parquet"
 
-# 사용할 임베딩 모델
-EMBED_MODEL = "text-embedding-3-small"
-
+# 사용할 임베딩 모델은 SentenceTransformer("BAAI/bge-m3")로 로드함
 
 class ChunkRetriever:
     """
-    chunks_512_64_final.jsonl -> OpenAI 임베딩 -> FAISS Index 생성/로드
+    chunks_512_64_final.jsonl// v2 // v6 -> bge m3 임베딩 -> FAISS Index 생성/로드
     """
 
     def __init__(
@@ -39,14 +34,14 @@ class ChunkRetriever:
         chunks_path: Path = CHUNKS_PATH,
         index_path: Path = FAISS_INDEX_PATH,
         meta_path: Path = META_PATH,
-        embed_model: str = EMBED_MODEL,
         batch_size: int = 128,
     ) -> None:
-        self.client = OpenAI()
+
+        self.embedder = SentenceTransformer("BAAI/bge-m3")
+        
         self.chunks_path = chunks_path
         self.index_path = index_path
         self.meta_path = meta_path
-        self.embed_model = embed_model
         self.batch_size = batch_size
 
         self.index: faiss.IndexFlatIP | None = None
@@ -143,12 +138,13 @@ class ChunkRetriever:
         # 🔹 임베딩 들어가기 전에 한 번 더 방어적으로 정제
         safe_texts = [self._clean_text(t) for t in texts]
 
-        resp = self.client.embeddings.create(
-            model=self.embed_model,
-            input=safe_texts,
-        )
-        return np.array([d.embedding for d in resp.data], dtype="float32")
-
+        vecs = self.embedder.encode(
+            safe_texts,
+            convert_to_numpy=True,
+            normalize_embeddings=True
+        ).astype("float32")
+        return vecs
+    
     def _save_index_and_meta(self) -> None:
         assert self.index is not None and self.meta_df is not None
 

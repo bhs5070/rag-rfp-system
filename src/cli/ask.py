@@ -1,43 +1,45 @@
-# src/cli/ask.py
-
-from __future__ import annotations
-import sys
+# src/rag_rfp/ask.py
+import typer
+from pathlib import Path
 
 from rag_rfp.retrieve.retriever import ChunkRetriever
 from rag_rfp.generate.generator import RAGGenerator
 
 
-def main() -> None:
-    print("=== RAG CLI (chunks_512_64_final 기반) ===")
-    print("종료하려면 빈 줄 또는 Ctrl+C 를 입력하세요.\n")
+app = typer.Typer()
 
+
+@app.command()
+def ask(
+    question: str = typer.Argument(..., help="사용자 질문"),
+    top_k: int = typer.Option(5, help="검색할 상위 chunk 개수"),
+):
+    """
+    Gemma-2-2B-IT + BGE-M3 + FAISS 기반 RAG 질의 응답.
+    """
+
+    print("\n[1] Loading retriever (FAISS index + metadata)...")
     retriever = ChunkRetriever()
-    generator = RAGGenerator(retriever=retriever)
 
-    while True:
-        try:
-            question = input("질문 > ").strip()
-        except (EOFError, KeyboardInterrupt):
-            print("\n종료합니다.")
-            break
+    print("[2] Loading Gemma-2-2B-IT model...")
+    generator = RAGGenerator(
+        retriever=retriever,
+        model_id="google/gemma-2-2b-it",  # 정확한 모델 ID
+        top_k=top_k
+    )
 
-        if not question:
-            print("종료합니다.")
-            break
+    print("\n[3] Running RAG...")
+    result = generator.ask(question, top_k=top_k)
 
-        answer_obj = generator.ask(question)
+    print("\n\n===== 📘 RAG Answer =====")
+    print(result.answer)
 
-        print("\n[답변]\n")
-        print(answer_obj.answer)
+    print("\n\n===== 📄 Used Contexts (Top-k) =====")
+    for c in result.contexts:
+        print(f"- doc: {c['doc_id']}, chunk: {c['chunk_index']}, score={c['score']:.4f}")
 
-        print("\n[사용된 컨텍스트 요약]\n")
-        for ctx in answer_obj.contexts[:3]:
-            print(
-                f"- doc={ctx.get('doc_id')}, chunk={ctx.get('chunk_index')}, "
-                f"chars={ctx.get('n_chars')}, score={ctx.get('score'):.4f}"
-            )
-        print("\n" + "-" * 60 + "\n")
+    print("\nDone.")
 
 
 if __name__ == "__main__":
-    main()
+    app()
