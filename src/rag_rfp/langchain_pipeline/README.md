@@ -71,14 +71,11 @@ python main.py
 
 
 **### 2) Streamlit 기반 RAG Chat 실행**
-'''bash
 streamlit run rag_chat_app.py
 
-'''cpp
 http://<VM-public-ip>:8501
 
 **### 3) eval 명령어 사용법**
-'''bash
 /eval <질문>
 
 ## 디렉토리 구조 
