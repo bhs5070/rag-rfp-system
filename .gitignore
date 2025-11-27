@@ -46,6 +46,7 @@ tmp/
 cache/
 *.pth
 *.ckpt
+.hf_qwen3_cache/
 
 # ==========================================
 # Data
@@ -86,3 +87,4 @@ __MACOSX/
 
 
 !outputs/structure_check/summary_final.md
+.hf_qwen3_cache/

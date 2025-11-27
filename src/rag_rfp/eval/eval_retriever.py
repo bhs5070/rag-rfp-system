@@ -1,13 +1,15 @@
 import json
 from pathlib import Path
 from collections import defaultdict
+from datetime import datetime
 
 from rag_rfp.retrieve.retriever import ChunkRetriever
  # 네 프로젝트에 맞게 import
 
 BASE_DIR = Path(__file__).resolve().parents[3]  # rag-rfp-system/
 EVAL_PATH = BASE_DIR / "data" / "eval" / "rag_eval.jsonl"
-
+OUT_PATH = BASE_DIR / "outputs" / "eval" / "retriever_eval.json"
+OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 def load_eval_dataset(path: Path):
     samples = []
@@ -47,11 +49,33 @@ def evaluate_retriever(k_values=(1, 3, 5)):
             if gt_ids & top_k_ids:
                 hits_at_k[k] += 1
 
+    # 계산 결과
+    metrics = {
+        f"Recall@{k}": hits_at_k[k] / total if total else 0.0
+        for k in k_values
+    }
+    
+    #출력
     print("\nRetriever Evaluation Metrics:")
     for k in sorted(k_values):
         recall = hits_at_k[k] / total if total > 0 else 0.0
         print(f"Recall@{k}: {recall:.4f}")
+        
+    # 파일로 저장
+    save_obj = {
+        "timestamp": datetime.now().isoformat(),
+        "model": "Qwen3-Embedding-0.6B",
+        "eval_file": str(EVAL_PATH),
+        "metrics": metrics,
+    }
+
+    with OUT_PATH.open("w", encoding="utf-8") as f:
+        json.dump(save_obj, f, indent=2, ensure_ascii=False)
+
+    print(f"\nSaved evaluation → {OUT_PATH}")
 
 
 if __name__ == "__main__":
     evaluate_retriever(k_values=(1, 3, 5))
+
+    
