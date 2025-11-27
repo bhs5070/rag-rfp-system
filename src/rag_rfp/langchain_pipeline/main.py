@@ -4,7 +4,8 @@ from typing import Dict, List
 
 from retriever_core import RFPRetrieverCore
 from lc_custom_retriever import CustomRFPRetriever
-from evaluate_generator import evaluate_one  # /eval 에서 사용
+# from evaluate_generator import evaluate_one
+from rag_rfp.generate.generator import RAGGenerator
 
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
