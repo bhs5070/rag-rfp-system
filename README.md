@@ -122,4 +122,4 @@ Docker 컨테이너화 및 배포 자동화
 
 손원후: [https://www.notion.so/2b9869855e42806a8824ced736e15303](https://www.notion.so/2b9869855e42806a8824ced736e15303?source=copy_link)
 
-이솔형: https://www.notion.so/8-2a724d5698b681e0b0edce55428a6c7d?source=copy_link
+이솔형: https://www.notion.so/2-2a724d5698b681709a85d118b4b925e4?source=copy_link
