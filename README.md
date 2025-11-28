@@ -119,3 +119,4 @@ Docker 컨테이너화 및 배포 자동화
 
 ## 📄 개인 협업 일지
 박병현: https://famous-gorilla-33.notion.site/AI-_-_-2a8c7c1a0092809fb74ac1cef219e972?source=copy_link
+손원후: [https://www.notion.so/2b9869855e42806a8824ced736e15303](https://www.notion.so/2b9869855e42806a8824ced736e15303?source=copy_link)
