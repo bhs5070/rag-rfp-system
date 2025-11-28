@@ -80,3 +80,6 @@ reports/
 __MACOSX/
 
 
+.hf_qwen3_cache/
+search/embeddings.npy
+chroma_bge_index/
