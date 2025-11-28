@@ -124,4 +124,4 @@ Docker 컨테이너화 및 배포 자동화
 
 이솔형: https://www.notion.so/2-2a724d5698b681709a85d118b4b925e4?source=copy_link
 
-배현석: https://www.notion.so/2a670bb8574780b2b6b8ca4a55e0baa6?source=copy_link
+배현석: [https://www.notion.so/2a670bb8574780b2b6b8ca4a55e0baa6?source=copy_link](https://www.notion.so/2a670bb8574780b2b6b8ca4a55e0baa6?source=copy_link)
