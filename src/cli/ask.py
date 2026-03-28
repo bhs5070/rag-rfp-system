@@ -1,14 +1,13 @@
 # src/cli/ask.py
 
 from __future__ import annotations
-import sys
 
-from rag_rfp.retrieve.retriever import ChunkRetriever
-from rag_rfp.generate.generator import RAGGenerator
+from src.rag_rfp.generate.generator import RAGGenerator
+from src.rag_rfp.retrieve.retriever import ChunkRetriever
 
 
 def main() -> None:
-    print("=== RAG CLI (chunks_512_64_final 기반) ===")
+    print("=== RAG CLI (semantic + ChromaDB + text-embedding-3-large) ===")
     print("종료하려면 빈 줄 또는 Ctrl+C 를 입력하세요.\n")
 
     retriever = ChunkRetriever()

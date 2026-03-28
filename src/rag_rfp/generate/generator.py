@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import List, Dict, Any
+import os
 
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -33,10 +34,10 @@ class RAGGenerator:
          metadata에는 "doc_id", "chunk_index" 등이 들어 있다고 가정
     """
 
-    def __init__(self, retriever, model: str = "gpt-5-mini", top_k: int = 5):
+    def __init__(self, retriever, model: str | None = None, top_k: int = 5):
         self.client = OpenAI()
         self.retriever = retriever
-        self.model = model
+        self.model = model or os.getenv("OPENAI_CHAT_MODEL", "gpt-4.1-mini")
         self.top_k = top_k
 
     # ------------------------------------------------------------------

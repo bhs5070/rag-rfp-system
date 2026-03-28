@@ -87,7 +87,7 @@ def load_faiss_index(path: str):
         return None
 
 def get_query_embeddings(queries: List[str]) -> np.ndarray:
-    OPENAI_EMBEDDING_MODEL = "text-embedding-3-small"
+    OPENAI_EMBEDDING_MODEL = os.environ.get("OPENAI_EMBED_MODEL", "text-embedding-3-large")
     response = client.embeddings.create(input=queries, model=OPENAI_EMBEDDING_MODEL, dimensions=TARGET_DIMENSION)
     embeddings = [data.embedding for data in response.data]
     return np.array(embeddings, dtype=np.float32)

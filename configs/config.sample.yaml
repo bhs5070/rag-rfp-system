@@ -16,27 +16,23 @@ preprocess:
     keep_layout: false
     drop_headers_footers: true
   chunk:
-    method: "sliding_window"
-    max_tokens: 512
-    stride: 128
-    overlap_ratio: 0.25
-    min_chars: 200
+    method: "semantic"
 embeddings:
   provider: "openai"
   model: "text-embedding-3-large"
-  batch_size: 32
+  batch_size: 128
 index:
-  backend: "faiss"
-  dim: 3072
-  path: "./vectorstore"
+  backend: "chromadb"
+  collection_name: "rfp_semantic_large"
+  path: "./data/vectorstores/chroma_semantic"
 retrieve:
-  top_k: 8
-  bm25_fallback: true
+  top_k: 5
+  bm25_fallback: false
 rerank:
-  enabled: true
+  enabled: false
   model: "BAAI/bge-reranker-base"
 generate:
   provider: "openai"
-  model: "gpt-4o-mini"
+  model: "gpt-4.1-mini"
   max_tokens: 512
   temperature: 0.2
