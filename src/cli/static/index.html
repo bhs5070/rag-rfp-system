@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RAG-RFP Workspace</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">RAG-RFP Workspace</p>
+          <h1>공공 RFP 문서를 검색하고 근거 기반 답변을 생성합니다.</h1>
+          <p class="hero-text">
+            현재 파이프라인은 <strong>semantic chunking</strong>,
+            <strong>text-embedding-3-large</strong>, <strong>ChromaDB</strong>,
+            <strong>gpt-4.1-mini</strong> 기준으로 동작합니다.
+          </p>
+        </div>
+        <div class="hero-meta" id="health-panel">
+          <div class="meta-card">
+            <span class="meta-label">Status</span>
+            <strong id="health-status">checking...</strong>
+          </div>
+          <div class="meta-card">
+            <span class="meta-label">Vector DB</span>
+            <strong id="health-collection">-</strong>
+          </div>
+          <div class="meta-card">
+            <span class="meta-label">Chunks</span>
+            <strong id="health-count">-</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="query-panel">
+          <label class="panel-label" for="question">질문</label>
+          <textarea
+            id="question"
+            rows="6"
+            placeholder="예: 고려대학교 차세대 포털·학사 정보시스템 구축 사업의 사업기간과 예산을 요약해줘."
+          ></textarea>
+
+          <div class="controls">
+            <label class="range-group">
+              <span>Top K</span>
+              <input id="top-k" type="range" min="3" max="10" value="5" />
+              <strong id="top-k-value">5</strong>
+            </label>
+            <button id="ask-button" type="button">질문 실행</button>
+          </div>
+        </section>
+
+        <section class="result-panel">
+          <div class="result-header">
+            <p class="panel-label">Answer</p>
+            <div class="result-badges">
+              <span class="badge" id="chat-model-badge">model: -</span>
+              <span class="badge">workflow: semantic -> chroma -> generate</span>
+            </div>
+          </div>
+
+          <div id="status-message" class="status-message">질문을 입력하고 실행하세요.</div>
+          <article id="answer-box" class="answer-box"></article>
+
+          <section class="sources">
+            <div class="sources-head">
+              <p class="panel-label">Contexts</p>
+              <span id="sources-count">0 chunks</span>
+            </div>
+            <div id="sources-list" class="sources-list"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
