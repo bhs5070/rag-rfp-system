@@ -58,6 +58,7 @@ data/vectorstores/
 data/eval/embedding_cache/
 !data/data_list.csv  # 메타데이터 파일만 추적
 pdf_files*/  # PDF 파일 폴더 제외
+pdf_files*  # 공백 포함 폴더명도 제외
 
 # ==========================================
 # Model Artifacts
